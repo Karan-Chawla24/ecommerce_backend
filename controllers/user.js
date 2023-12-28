@@ -3,38 +3,39 @@ import { User } from "../models/user.js";
 import bcrypt from "bcrypt";
 import { sendCookie } from "../utils/feature.js";
 
-// export const Register = async (req, res, next) => {
-//   try {
-//     const { name, email, password } = req.body;
-//     let user = await User.findOne({ email });
-//     if (user) return next(new ErrorHandler("User Already Exists", 400));
-//     const hashedPassword = await bcrypt.hash(password, 10);
-//     user = await User.create({ name, email, password: hashedPassword });
-//     sendCookie(user, res, "Registered Successfully", 201);
-//   } catch (error) {
-//     next(error);
-//   }
 export const Register = async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
-
+    let user = await User.findOne({ email });
+    if (user) return next(new ErrorHandler("User Already Exists", 400));
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    const user = await User.findOneAndUpdate(
-      { email },
-      { $setOnInsert: { name, email, password: hashedPassword } },
-      { upsert: true, new: true }
-    );
-
-    if (!user) {
-      sendCookie(user, res, "Registered Successfully", 201);
-    } else {
-      return next(new ErrorHandler("User Already Exists", 400));
-    }
+    user = await User.create({ name, email, password: hashedPassword });
+    sendCookie(user, res, "Registered Successfully", 201);
   } catch (error) {
     next(error);
   }
 };
+// export const Register = async (req, res, next) => {
+//   try {
+//     const { name, email, password } = req.body;
+
+//     const hashedPassword = await bcrypt.hash(password, 10);
+
+//     const user = await User.findOneAndUpdate(
+//       { email },
+//       { $setOnInsert: { name, email, password: hashedPassword } },
+//       { upsert: true, new: true }
+//     );
+
+//     if (!user) {
+//       sendCookie(user, res, "Registered Successfully", 201);
+//     } else {
+//       return next(new ErrorHandler("User Already Exists", 400));
+//     }
+//   } catch (error) {
+//     next(error);
+//   }
+// };
 
 export const Login = async (req, res, next) => {
   try {
