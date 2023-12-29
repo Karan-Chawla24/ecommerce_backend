@@ -25,6 +25,7 @@ export const getAllProducts = async (req, res, next) => {
     const products = await Product.find({}).populate("user");
     res.status(200).json({
       success: true,
+      message: "Fetched Products Successfully",
       products,
     });
   } catch (error) {
