@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import { errorMiddleware } from "./middlewares/error.js";
 import usersRouter from "./routes/user.js";
 import productRouter from "./routes/product.js";
+import cartRouter from "./routes/cart.js";
 import cors from "cors";
 
 export const app = express();
@@ -24,6 +25,7 @@ app.use(
 
 app.use("/api/v1/users", usersRouter);
 app.use("/api/v1/product", productRouter);
+app.use("/api/v1/cart", cartRouter);
 
 app.get("/", (req, res) => {
   res.send("App is Working Fine");
