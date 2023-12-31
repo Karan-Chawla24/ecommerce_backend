@@ -13,6 +13,7 @@ export const addToCart = async (req, res, next) => {
 
     const existingProduct = await Cart.findOne({ user: userId });
     const product = await Product.findById(productId);
+
     if (!product) {
       return res
         .status(404)
@@ -24,7 +25,6 @@ export const addToCart = async (req, res, next) => {
         user: userId,
         products: [{ product: productId, quantity }],
       });
-      console.log("new", newCart);
       await newCart.save();
       return res
         .status(201)
@@ -38,7 +38,7 @@ export const addToCart = async (req, res, next) => {
     if (existingCartItem) {
       existingCartItem.quantity += quantity;
     } else {
-      existingProduct.products.push({ product, quantity });
+      existingProduct.products.push({ product: productId, quantity }); // Changed to push productId instead of product object
     }
 
     await existingProduct.save();
