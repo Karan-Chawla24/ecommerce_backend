@@ -5,6 +5,7 @@ import { errorMiddleware } from "./middlewares/error.js";
 import usersRouter from "./routes/user.js";
 import productRouter from "./routes/product.js";
 import cartRouter from "./routes/cart.js";
+import paymentRouter from "./routes/Payment.js";
 import cors from "cors";
 
 export const app = express();
@@ -14,6 +15,7 @@ config({
 });
 
 app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(
   cors({
@@ -26,6 +28,7 @@ app.use(
 app.use("/api/v1/users", usersRouter);
 app.use("/api/v1/product", productRouter);
 app.use("/api/v1/cart", cartRouter);
+app.use("/api/v1/", paymentRouter);
 
 app.get("/", (req, res) => {
   res.send("App is Working Fine");
