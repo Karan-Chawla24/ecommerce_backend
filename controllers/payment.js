@@ -14,10 +14,6 @@ export const checkout = async (req, res, next) => {
       order,
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "internal server error",
-      error: error.message,
-    });
+    console.log(error);
   }
 };
