@@ -3,7 +3,7 @@ import { instance } from "../server.js";
 export const checkout = async (req, res, next) => {
   try {
     var options = {
-      amount: Number(req.body.amount * 100),
+      amount: Number(req.body.amount),
       currency: "USD",
     };
     console.log("amount", req.body.amount);
