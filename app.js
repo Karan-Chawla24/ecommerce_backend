@@ -37,4 +37,10 @@ app.get("/", (req, res) => {
   res.send("App is Working Fine");
 });
 
+app.get("/api/v1/getkey", (req, res) => {
+  res.status(200).json({
+    key: process.env.RAZORPAY_API_KEY,
+  });
+});
+
 app.use(errorMiddleware);
