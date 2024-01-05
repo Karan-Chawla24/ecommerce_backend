@@ -24,7 +24,10 @@ app.use(
     credentials: true,
   })
 );
-
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Credentials", "true");
+  next();
+});
 app.use("/api/v1/users", usersRouter);
 app.use("/api/v1/product", productRouter);
 app.use("/api/v1/cart", cartRouter);
