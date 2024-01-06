@@ -3,8 +3,8 @@ import { instance } from "../server.js";
 export const checkout = async (req, res, next) => {
   try {
     var options = {
-      amount: Number(req.body.amount),
-      currency: "USD",
+      amount: Number(req.body.amount * 100),
+      currency: "INR",
     };
     console.log("amount", req.body.amount);
     const order = await instance.orders.create(options);
