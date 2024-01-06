@@ -1,4 +1,5 @@
 import { instance } from "../server.js";
+import crypto from "crypto";
 
 export const checkout = async (req, res, next) => {
   try {
@@ -23,7 +24,16 @@ export const checkout = async (req, res, next) => {
 };
 
 export const paymentVerification = async (req, res, next) => {
-  console.log(req.body);
+  const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
+    req.body;
+
+  const body = razorpay_order_id + "|" + razorpay_payment_id;
+  const expectedSignature = crypto
+    .createHmac("sha256", process.env.RAZORPAY_SECRET_API_KEY)
+    .update(body.toString())
+    .digest("hex");
+  console.log("sig recieved", razorpay_signature);
+  console.log("sig generated", expectedSignature);
   res.status(200).json({
     success: true,
   });
