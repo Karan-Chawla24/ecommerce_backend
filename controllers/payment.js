@@ -1,18 +1,21 @@
+import { Cart } from "../models/cart.js";
+import { Payment } from "../models/payment.js";
 import { instance } from "../server.js";
 import crypto from "crypto";
 
 export const checkout = async (req, res, next) => {
   try {
+    const cartUser = await Cart.find({}).populate("user");
+    const currentUserInfo = cartUser[0].user;
     var options = {
       amount: Number(req.body.amount * 100),
       currency: "INR",
     };
-    console.log("amount", req.body.amount);
     const order = await instance.orders.create(options);
-    console.log(order);
     res.status(200).json({
       success: true,
       order,
+      currentUserInfo,
     });
   } catch (error) {
     console.log(error);
@@ -34,13 +37,16 @@ export const paymentVerification = async (req, res, next) => {
     .digest("hex");
   const isSuccess = expectedSignature === razorpay_signature;
   if (isSuccess) {
+    await Payment.create({
+      razorpay_order_id,
+      razorpay_payment_id,
+      razorpay_signature,
+      user: req.user,
+    });
     res.redirect(`http://localhost:5173/paymentsuccess/${razorpay_payment_id}`);
   } else {
     res.status(400).json({
       success: false,
     });
   }
-  res.status(200).json({
-    success: true,
-  });
 };
