@@ -32,8 +32,14 @@ export const paymentVerification = async (req, res, next) => {
     .createHmac("sha256", process.env.RAZORPAY_SECRET_API_KEY)
     .update(body.toString())
     .digest("hex");
-  console.log("sig recieved", razorpay_signature);
-  console.log("sig generated", expectedSignature);
+  const isSuccess = expectedSignature === razorpay_signature;
+  if (isSuccess) {
+    res.redirect(`http://localhost:5173/paymentsuccess/${razorpay_payment_id}`);
+  } else {
+    res.status(400).json({
+      success: false,
+    });
+  }
   res.status(200).json({
     success: true,
   });
