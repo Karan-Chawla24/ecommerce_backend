@@ -44,6 +44,13 @@ export const paymentVerification = async (req, res, next) => {
       user: req.user,
     });
     res.redirect(`http://localhost:5173/paymentsuccess/${razorpay_payment_id}`);
+    const userId = req.user._id;
+    await Cart.findOneAndUpdate(
+      { user: userId },
+      { $set: { products: [] } },
+      { new: true }
+    );
+
   } else {
     res.status(400).json({
       success: false,

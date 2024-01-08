@@ -33,6 +33,21 @@ export const Login = async (req, res, next) => {
   }
 };
 
+export const Profile = async (req, res, next) => {
+  try {
+    res.status(200).json({
+      success: true,
+      user: req.user,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "internal server error",
+    });
+  }
+};
+
 export const Logout = (req, res, next) => {
   res
     .status(200)
