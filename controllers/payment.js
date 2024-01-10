@@ -43,7 +43,7 @@ export const paymentVerification = async (req, res, next) => {
       razorpay_signature,
       user: req.user,
     });
-    res.redirect(`https://ecommerce-service-pn5w.onrender.com/${razorpay_payment_id}`);
+    res.redirect(`${process.env.FRONTEND_URL}/${razorpay_payment_id}`);
     const userId = req.user._id;
     await Cart.findOneAndUpdate(
       { user: userId },
