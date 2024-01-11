@@ -43,16 +43,15 @@ export const paymentVerification = async (req, res, next) => {
       razorpay_signature,
       user: req.user,
     });
-    // res.redirect(`${process.env.FRONTEND_URL}/paymentsuccess/${razorpay_payment_id}`);
     const userId = req.user._id;
     await Cart.findOneAndUpdate(
       { user: userId },
       { $set: { products: [] } },
       { new: true }
     );
-    res.status(200).json({
-      success: true,
-    });
+    res.redirect(
+      `${process.env.FRONTEND_URL}/paymentsuccess/${razorpay_payment_id}`
+    );
   } else {
     res.status(400).json({
       success: false,
