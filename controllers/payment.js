@@ -50,7 +50,9 @@ export const paymentVerification = async (req, res, next) => {
       { $set: { products: [] } },
       { new: true }
     );
-
+    res.status(200).json({
+      success: true,
+    });
   } else {
     res.status(400).json({
       success: false,
