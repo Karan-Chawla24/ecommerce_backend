@@ -49,12 +49,8 @@ export const paymentVerification = async (req, res, next) => {
       { $set: { products: [] } },
       { new: true }
     );
-    // res.status(200).json({
-    //   success: true,
-    //   redirectUrl: `${process.env.FRONTEND_URL}/paymentsuccess/${razorpay_payment_id}`,
-    // });
     res.redirect(
-      `${process.env.FRONTEND_URL}/paymentsuccess/${razorpay_payment_id}`
+      `http://localhost:5173/paymentsuccess?reference=${razorpay_payment_id}`
     );
   } else {
     res.status(400).json({
