@@ -50,7 +50,7 @@ export const paymentVerification = async (req, res, next) => {
       { new: true }
     );
     res.redirect(
-      `${process.env.FRONTEND_URL}/paymentsuccess?reference=${razorpay_payment_id}`
+      `https://ecommerce-frontend-fawn-alpha.vercel.app/paymentsuccess?reference=${razorpay_payment_id}`
     );
   } else {
     res.status(400).json({
