@@ -1,7 +1,9 @@
 import { Cart } from "../models/cart.js";
+import { Order } from "../models/order.js";
 import { Payment } from "../models/payment.js";
 import { instance } from "../server.js";
 import crypto from "crypto";
+import { calculateTotalAmount } from "../utils/feature.js";
 
 export const checkout = async (req, res, next) => {
   try {
@@ -44,6 +46,21 @@ export const paymentVerification = async (req, res, next) => {
       user: req.user,
     });
     const userId = req.user._id;
+    const cart = await Cart.findOne({ user: userId }).populate(
+      "products.product"
+    );
+
+    const order = new Order({
+      user: userId,
+      orderId: razorpay_order_id,
+      products: cart.products.map((item) => ({
+        product: item.product,
+        quantity: item.quantity,
+      })),
+      totalAmount: calculateTotalAmount(cart.products),
+    });
+
+    await order.save();
     await Cart.findOneAndUpdate(
       { user: userId },
       { $set: { products: [] } },
@@ -52,6 +69,9 @@ export const paymentVerification = async (req, res, next) => {
     res.redirect(
       `https://ecommerce-frontend-fawn-alpha.vercel.app/paymentsuccess?reference=${razorpay_payment_id}`
     );
+    // res.redirect(
+    //   `http://localhost:5173/paymentsuccess?reference=${razorpay_payment_id}`
+    // );
   } else {
     res.status(400).json({
       success: false,

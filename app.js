@@ -6,6 +6,7 @@ import usersRouter from "./routes/user.js";
 import productRouter from "./routes/product.js";
 import cartRouter from "./routes/cart.js";
 import paymentRouter from "./routes/Payment.js";
+import orderRouter from "./routes/order.js";
 import cors from "cors";
 
 export const app = express();
@@ -20,7 +21,7 @@ app.use(cookieParser());
 app.use(
   cors({
     origin: [process.env.FRONTEND_URL],
-    methods: ["GET", "POST", "PUT", "DELETE","HEAD","PATCH"],
+    methods: ["GET", "POST", "PUT", "DELETE", "HEAD", "PATCH"],
     credentials: true,
   })
 );
@@ -31,7 +32,8 @@ app.use((req, res, next) => {
 app.use("/api/v1/users", usersRouter);
 app.use("/api/v1/product", productRouter);
 app.use("/api/v1/cart", cartRouter);
-app.use("/api/v1/", paymentRouter);
+app.use("/api/v1", paymentRouter);
+app.use("/api/v1", orderRouter);
 
 app.get("/", (req, res) => {
   res.send("App is Working Fine");

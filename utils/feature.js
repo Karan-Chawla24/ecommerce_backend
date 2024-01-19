@@ -17,3 +17,17 @@ export const sendCookie = (user, res, message, statusCode = 200) => {
       message,
     });
 };
+
+export function calculateTotalAmount(products) {
+  if (!Array.isArray(products) || products.length === 0) {
+    return 0;
+  }
+
+  return products.reduce((total, cartItem) => {
+    if (cartItem.product && cartItem.product.price && cartItem.quantity) {
+      return total + (cartItem.product.price * cartItem.quantity);
+    } else {
+      return total;
+    }
+  }, 0);
+}
